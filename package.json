@@ -1,0 +1,23 @@
+{
+  "name": "@antriver/vue-site-scaffolding",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "./node_modules/.bin/eslint src",
+    "lintfix": "./node_modules/.bin/eslint src --fix"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.1",
+    "lodash": "^4.17.15",
+    "lru-cache": "^5.1.1",
+    "qs": "^6.9.1"
+  },
+  "devDependencies": {
+    "@digitickets/eslint-config-digitickets": "^1.0.10",
+    "eslint-plugin-vue": "^6.1.2"
+  }
+}
