@@ -1,14 +1,15 @@
-import {Method} from "axios";
+import { Method } from 'axios';
 
 export interface ApiRequest {
-    method: Method,
-    url: string,
-    params?: any,
-    headers?: any
+    method: Method;
+    url: string;
+    params?: any;
+    headers?: any;
 }
 
 export class ApiError extends Error {
     public response: any;
+
     public request: ApiRequest;
 
     /**
@@ -28,8 +29,7 @@ export class ApiError extends Error {
         this.request = request;
         this.stack = (new Error(this.message)).stack;
     }
-
 }
 
-//ApiError.prototype = Object.create(Error.prototype);
-//ApiError.prototype.constructor = ApiError;
+// ApiError.prototype = Object.create(Error.prototype);
+// ApiError.prototype.constructor = ApiError;

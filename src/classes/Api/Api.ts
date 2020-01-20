@@ -1,4 +1,4 @@
-import axios, {AxiosInstance, Method} from 'axios';
+import axios, { AxiosInstance, Method } from 'axios';
 import qs from 'qs';
 import cloneDeep from 'lodash/cloneDeep';
 import { AbstractApi } from './AbstractApi';
@@ -120,10 +120,10 @@ export class Api extends AbstractApi {
                 });
                 logApiError(err);
 
-                /*if (error === true) {
-                    // Set the error callback to boolean true to use the default error handler.
-                    showAlert(message);
-                }*/
+                // if (error === true) {
+                //     // Set the error callback to boolean true to use the default error handler.
+                //     showAlert(message);
+                // }
 
                 reject(err);
             };
