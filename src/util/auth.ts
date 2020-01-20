@@ -1,8 +1,9 @@
 import config from '@/config';
 import { showAlert } from './dialogs';
 import { readSessionToken, storeSessionToken } from './token-store';
+import { Component } from 'vue/types/umd';
 
-export function redirectToLogin(component, next) {
+export function redirectToLogin(component: Component, next: string) {
     const url = `/login${next ? `?next=${encodeURIComponent(next)}` : ''}`;
     if (component.$router) {
         component.$router.push(url);

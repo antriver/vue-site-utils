@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "./node_modules/.bin/eslint src",
-    "lintfix": "./node_modules/.bin/eslint src --fix"
+    "build": "rm -rf dist && tsc",
+    "lint": "./node_modules/.bin/eslint \"src/**/*.{ts,tsx,js,vue}\"",
+    "lintfix": "./node_modules/.bin/eslint \"src/**/*.{ts,tsx,js,vue}\" --fix"
   },
   "author": "",
   "license": "ISC",
@@ -14,10 +14,17 @@
     "axios": "^0.19.1",
     "lodash": "^4.17.15",
     "lru-cache": "^5.1.1",
-    "qs": "^6.9.1"
+    "qs": "^6.9.1",
+    "vue": "^2.6.11"
   },
   "devDependencies": {
     "@digitickets/eslint-config-digitickets": "^1.0.10",
-    "eslint-plugin-vue": "^6.1.2"
+    "@types/lodash": "^4.14.149",
+    "@types/lru-cache": "^5.1.0",
+    "@types/qs": "^6.9.0",
+    "@typescript-eslint/eslint-plugin": "^2.16.0",
+    "@typescript-eslint/parser": "^2.16.0",
+    "eslint-plugin-vue": "^6.1.2",
+    "typescript": "^3.7.5"
   }
 }

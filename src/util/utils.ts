@@ -7,7 +7,9 @@
  *
  * @return {*}
  */
-export function callOrReturn(funcOrString, funcArgs = []) {
+import Vue from 'vue/types/umd';
+
+export function callOrReturn(funcOrString: Function|string, funcArgs = []) {
     if (typeof funcOrString === 'function') {
         return funcOrString(...funcArgs);
     }
@@ -25,11 +27,11 @@ export function callOrReturn(funcOrString, funcArgs = []) {
 // @param instance
 // @param funcArgs
 //
-export function callVueOptionFunc(instance, funcName, funcArgs = []) {
+export function callVueOptionFunc(instance: Vue, funcName: string, funcArgs = []) {
     if (instance && instance.$options && instance.$options[funcName]) {
         return instance.$options[funcName](...funcArgs);
     }
     return instance[funcName](...funcArgs);
 }
 
-export const encodeQueryString = obj => Object.keys(obj).map(k => `${k}=${encodeURIComponent(obj[k])}`).join('&');
+export const encodeQueryString = (obj: object) => Object.keys(obj).map(k => `${k}=${encodeURIComponent(obj[k])}`).join('&');

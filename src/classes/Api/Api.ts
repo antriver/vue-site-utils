@@ -1,45 +1,10 @@
-import axios from 'axios';
+import axios, {AxiosInstance, Method} from 'axios';
 import qs from 'qs';
 import cloneDeep from 'lodash/cloneDeep';
 import { AbstractApi } from './AbstractApi';
-import { showAlert } from '../util/dialogs';
+import { ApiError } from './ApiError';
 
-/**
- * @param {string} message
- * @param {object} [response]
- * @param {{method: string, url: string, params: object, headers: object}} [request]
- */
-export function ApiError(message, response, request) {
-    /**
-     * @type {string}
-     */
-    this.message = message;
-    // if (request) {
-    //     this.message += ' ' + request.method + ' ' + request.url;
-    // }
-
-    this.name = 'ApiError';
-
-    /**
-     * @type {?Object}
-     */
-    this.response = response;
-
-    /**
-     * @type {?{method: string, url: string, params: Object, headers: Object}}
-     */
-    this.request = request;
-
-    this.stack = (new Error(this.message)).stack;
-}
-
-ApiError.prototype = Object.create(Error.prototype);
-ApiError.prototype.constructor = ApiError;
-
-/**
- * @param {ApiError} err
- */
-const logApiError = (err) => {
+const logApiError = (err: ApiError) => {
     /* global Raven */
     if (typeof Raven !== 'undefined') {
         const responseStatus = err.response ? parseInt(err.response.status) : null;
@@ -66,41 +31,23 @@ const logApiError = (err) => {
 };
 
 export class Api extends AbstractApi {
-    /**
-     * @param {?string} [authToken]
-     * @param {string} url
-     * @param {object} [headers]
-     * @param {LRUCache} [cache]
-     */
-    constructor(authToken, url, headers, cache) {
-        super(authToken);
-        this.url = url;
-        this.headers = headers;
-        this.cache = cache;
+    protected axios: AxiosInstance;
 
+    constructor(apiUrl: string, authToken: string|null, headers: any) {
+        super(apiUrl, authToken);
+        this.headers = headers;
         this.axios = axios.create();
     }
 
-    /**
-     * @param {String} method
-     * @param {String} endpoint
-     * @param {object} [data]
-     * @param {Function} [success] FIXME: This all needs to be changed to use promises because it screws up Sentry.
-     * @param {Function} [error]
-     * @param {Function} [complete]
-     * @param {boolean} [cache]
-     * @return {Promise<any>}
-     */
-    request(method, endpoint, data, success, error, complete, cache) {
+    request(method: Method, endpoint: string, data: object, cache?: boolean): Promise<any> {
         const startedAt = Date.now();
 
         let url = this.createUrl(endpoint);
 
-        let params;
+        let params: any;
         if (data) {
             // Copy data to a new object so we don't accidentally modify the original during SSR.
             params = {
-
                 ...data
             };
         } else {
@@ -131,7 +78,7 @@ export class Api extends AbstractApi {
 
         const jsonParams = JSON.stringify(params);
 
-        let cacheKey;
+        let cacheKey: string;
         if (cache === true) {
             cacheKey = url + jsonParams;
         }
@@ -141,7 +88,7 @@ export class Api extends AbstractApi {
              * @param {object} response
              * @param {boolean} [fromCache]
              */
-            const onSuccess = (response, fromCache) => {
+            const onSuccess = (response: any, fromCache: boolean) => {
                 if (response.error) {
                     // Handle cases where the server returns an error response with a 200 status.
                     onError(response.error, response);
@@ -153,9 +100,6 @@ export class Api extends AbstractApi {
                     this.cache.set(cacheKey, response);
                 }
 
-                if (typeof success === 'function') {
-                    success(response);
-                }
                 resolve(response);
             };
 
@@ -163,7 +107,7 @@ export class Api extends AbstractApi {
              * @param {string} message
              * @param {?object} response
              */
-            let onError = (message, response) => {
+            let onError = (message: string, response: any) => {
                 if (!response) {
                     // response will always be an object to avoid having to check everywhere.
                     response = {};
@@ -176,21 +120,16 @@ export class Api extends AbstractApi {
                 });
                 logApiError(err);
 
-                if (typeof error === 'function') {
-                    error(message, response);
-                } else if (error === true) {
+                /*if (error === true) {
                     // Set the error callback to boolean true to use the default error handler.
                     showAlert(message);
-                }
+                }*/
 
                 reject(err);
             };
 
             const onComplete = () => {
                 console.log(`[API] Request took ${Date.now() - startedAt}ms`, method, url, jsonParams);
-                if (typeof complete === 'function') {
-                    complete();
-                }
             };
 
             // Check the cache for an existing result.
@@ -207,7 +146,7 @@ export class Api extends AbstractApi {
 
             console.log('[API] Request', method, url); // , jsonParams, headers);
 
-            this.axios({
+            this.axios.request({
                 method,
                 url,
                 headers,
@@ -226,7 +165,7 @@ export class Api extends AbstractApi {
             })
                 .then((response) => {
                     if (response && typeof response.data === 'object' && response.data) {
-                        onSuccess(response.data);
+                        onSuccess(response.data, false);
                     } else {
                         onError('Unexpected API response.', response.data);
                     }
