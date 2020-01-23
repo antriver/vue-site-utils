@@ -4,10 +4,10 @@ import cloneDeep from 'lodash/cloneDeep';
 import { AbstractApi } from './AbstractApi';
 import { ApiError } from './ApiError';
 
-const logApiError = (err: ApiError) => {
+const logApiError = (err: ApiError): void => {
     /* global Raven */
     if (typeof Raven !== 'undefined') {
-        const responseStatus = err.response ? parseInt(err.response.status) : null;
+        const responseStatus = err.response ? parseInt(err.response.status, 10) : null;
         if (responseStatus === 403) {
             return;
         }
