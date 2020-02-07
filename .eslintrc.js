@@ -24,7 +24,10 @@ module.exports = {
         ],
         '@typescript-eslint/no-explicit-any': [
             'off'
-        ]
+        ],
+
+        "no-useless-constructor": "off",
+        "@typescript-eslint/no-useless-constructor": "error",
     },
     overrides: [
         {
@@ -36,7 +39,12 @@ module.exports = {
                 jest: true
             }
         }
-    ]
+    ],
+    settings: {
+        'import/resolver': {
+            typescript: {}
+        }
+    },
     // check if imports actually resolve
     /*'settings': {
         'import/resolver': {

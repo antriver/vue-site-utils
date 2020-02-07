@@ -16,16 +16,18 @@
     "lodash": "^4.17.15",
     "lru-cache": "^5.1.1",
     "qs": "^6.9.1",
+    "universal-cookie": "^4.0.3",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5"
   },
   "devDependencies": {
-    "@digitickets/eslint-config-digitickets": "^1.0.10",
+    "@digitickets/eslint-config-digitickets": "^1.0.17",
     "@types/lodash": "^4.14.149",
     "@types/lru-cache": "^5.1.0",
     "@types/qs": "^6.9.0",
     "@typescript-eslint/eslint-plugin": "^2.16.0",
     "@typescript-eslint/parser": "^2.16.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-vue": "^6.1.2",
     "typescript": "^3.7.5"
   }
