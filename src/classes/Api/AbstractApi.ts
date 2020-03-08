@@ -29,7 +29,7 @@ export abstract class AbstractApi {
         return `${this.url}/${endpoint}`;
     }
 
-    get(endpoint: string, params: object, cache: boolean): Promise<any> {
+    get(endpoint: string, params?: object, cache?: boolean): Promise<any> {
         return this.request('GET', endpoint, params, cache);
     }
 

@@ -2,6 +2,7 @@ import config from '@/config';
 import { showAlert } from './dialogs';
 import { readSessionToken, storeSessionToken } from './token-store';
 import { Component } from 'vue/types/umd';
+import { TokenStoreInterface } from '@/token-stores/TokenStoreInterface';
 
 export function redirectToLogin(component: Component, next: string) {
     const url = `/login${next ? `?next=${encodeURIComponent(next)}` : ''}`;
@@ -75,10 +76,15 @@ export function showApiErrorWithPotentialDraftContent(component, user, error) {
     }
 }
 
-export const loginFromResponse = (component, response, redirect) => {
+export const loginFromResponse = (
+    tokenStore: TokenStoreInterface,
+    component: Component,
+    response: any,
+    redirect: boolean
+): void => {
     component.$store.commit('auth/setUser', response);
 
-    storeSessionToken(response.token);
+    tokenStore.setToken(response.token);
 
     /* global Raven */
     if (typeof Raven !== 'undefined') {
