@@ -3,6 +3,8 @@ import { showAlert } from './dialogs';
 import { readSessionToken, storeSessionToken } from './token-store';
 import { Component } from 'vue/types/umd';
 import { TokenStoreInterface } from '@/token-stores/TokenStoreInterface';
+import { VueRouter } from 'vue-router/types/router';
+import { Store } from 'vuex';
 
 export function redirectToLogin(component: Component, next: string) {
     const url = `/login${next ? `?next=${encodeURIComponent(next)}` : ''}`;
@@ -78,11 +80,12 @@ export function showApiErrorWithPotentialDraftContent(component, user, error) {
 
 export const loginFromResponse = (
     tokenStore: TokenStoreInterface,
-    component: Component,
+    router: VueRouter,
+    store: Store,
     response: any,
-    redirect: boolean
+    redirect:boolean = true
 ): void => {
-    component.$store.commit('auth/setUser', response);
+    store.commit('auth/setUser', response);
 
     tokenStore.setToken(response.token);
 
@@ -95,8 +98,8 @@ export const loginFromResponse = (
     }
 
     if (redirect) {
-        const next = component.$store.state.loginRedirect ? component.$store.state.loginRedirect : '/';
-        component.$router.replace(next);
+        const next = store.state.loginRedirect ? store.state.loginRedirect : '/';
+        router.replace(next);
     }
 };
 
