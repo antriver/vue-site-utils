@@ -5,6 +5,7 @@ import { Component } from 'vue/types/umd';
 import { TokenStoreInterface } from '@/token-stores/TokenStoreInterface';
 import { VueRouter } from 'vue-router/types/router';
 import { Store } from 'vuex';
+import { Api } from '@/classes/Api/Api';
 
 export function redirectToLogin(component: Component, next: string) {
     const url = `/login${next ? `?next=${encodeURIComponent(next)}` : ''}`;
@@ -89,9 +90,8 @@ export const loginFromResponse = (
 
     tokenStore.setToken(response.token);
 
-    /* global Raven */
-    if (typeof Raven !== 'undefined') {
-        Raven.setUserContext({
+    if (typeof window.Raven !== 'undefined') {
+        window.Raven.setUserContext({
             username: response.user.username,
             id: response.user.id
         });
@@ -103,23 +103,25 @@ export const loginFromResponse = (
     }
 };
 
-export const logout = (component, tokenStore: TokenStoreInterface) => {
-    const existingToken = component.$store.state.auth.token;
+export const logout = (
+    api: Api,
+    store: Store,
+    tokenStore: TokenStoreInterface
+): void => {
+    const existingToken = tokenStore.getToken();
 
     // Tell API to end the session.
-    component.$root.$options.$api.delete('auth', { token: existingToken });
+    api.delete('auth', { token: existingToken });
 
     // Delete user from store.
-    component.$store.commit('auth/setUser', null);
+    store.commit('auth/setUser', null);
 
     // Clear saved session token.
     tokenStore.setToken(null);
 
-    if (typeof Raven !== 'undefined') {
-        Raven.setUserContext();
+    if (typeof window.Raven !== 'undefined') {
+        window.Raven.setUserContext();
     }
-
-    component.$router.push('/');
 };
 
 /**

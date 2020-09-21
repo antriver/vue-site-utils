@@ -6,7 +6,7 @@ export class LocalStorageTokenStore extends AbstractTokenStore implements TokenS
         return window.localStorage.getItem(this.keyName) || null;
     }
 
-    public setToken(token: string): void {
+    public setToken(token: string | null): void {
         if (token) {
             window.localStorage.setItem(this.keyName, token);
         } else {
