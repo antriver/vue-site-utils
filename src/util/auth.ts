@@ -1,6 +1,6 @@
 import config from '@/config';
 import { showAlert } from './dialogs';
-import { readSessionToken, storeSessionToken } from './token-store';
+import { readSessionToken } from './token-store';
 import { Component } from 'vue/types/umd';
 import { TokenStoreInterface } from '@/token-stores/TokenStoreInterface';
 import { VueRouter } from 'vue-router/types/router';
@@ -103,7 +103,7 @@ export const loginFromResponse = (
     }
 };
 
-export const logout = (component) => {
+export const logout = (component, tokenStore: TokenStoreInterface) => {
     const existingToken = component.$store.state.auth.token;
 
     // Tell API to end the session.
@@ -112,7 +112,8 @@ export const logout = (component) => {
     // Delete user from store.
     component.$store.commit('auth/setUser', null);
 
-    storeSessionToken(null);
+    // Clear saved session token.
+    tokenStore.setToken(null);
 
     if (typeof Raven !== 'undefined') {
         Raven.setUserContext();
