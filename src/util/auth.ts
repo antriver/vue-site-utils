@@ -103,22 +103,25 @@ export const loginFromResponse = (
     }
 };
 
-export const logout = (component) => {
-    const existingToken = component.$store.state.auth.token;
+export const logout = (
+    api,
+    store,
+    tokenStore: TokenStoreInterface,
+) => {
+
+    const existingToken = store.state.auth.token;
 
     // Tell API to end the session.
-    component.$root.$options.$api.delete('auth', { token: existingToken });
+    api.delete('auth', { token: existingToken });
 
     // Delete user from store.
-    component.$store.commit('auth/setUser', null);
+    store.commit('auth/setUser', null);
 
-    storeSessionToken(null);
+    tokenStore.setToken(null);
 
     if (typeof Raven !== 'undefined') {
         Raven.setUserContext();
     }
-
-    component.$router.push('/');
 };
 
 /**

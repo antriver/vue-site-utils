@@ -1,7 +1,8 @@
 import LRUCache from 'lru-cache';
+import { TokenStoreInterface } from '@/token-stores/TokenStoreInterface';
 
 export abstract class AbstractApi {
-    protected authToken: string|null;
+    protected authTokenStore: TokenStoreInterface;
 
     protected readonly url: string;
 
@@ -9,20 +10,12 @@ export abstract class AbstractApi {
 
     protected cache?: LRUCache<string, any>;
 
-    protected constructor(apiUrl: string, authToken: string|null) {
-        /**
-         * @type {?string}
-         */
-        this.authToken = null;
-        if (authToken) {
-            this.setAuthToken(authToken);
-        }
-
+    protected constructor(
+        apiUrl: string,
+        authTokenStore: TokenStoreInterface
+    ) {
         this.url = apiUrl;
-    }
-
-    setAuthToken(authToken: string|null): void {
-        this.authToken = authToken || null;
+        this.authTokenStore = authTokenStore;
     }
 
     createUrl(endpoint: string): string {

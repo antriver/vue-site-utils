@@ -3,6 +3,7 @@ import qs from 'qs';
 import cloneDeep from 'lodash/cloneDeep';
 import { AbstractApi } from './AbstractApi';
 import { ApiError } from './ApiError';
+import { TokenStoreInterface } from '@/token-stores/TokenStoreInterface';
 
 const logApiError = (err: ApiError): void => {
     /* global Raven */
@@ -33,8 +34,8 @@ const logApiError = (err: ApiError): void => {
 export class Api extends AbstractApi {
     protected axios: AxiosInstance;
 
-    constructor(apiUrl: string, authToken: string|null, headers: any) {
-        super(apiUrl, authToken);
+    constructor(apiUrl: string, authTokenStore: TokenStoreInterface, headers: any) {
+        super(apiUrl, authTokenStore);
         this.headers = headers;
         this.axios = axios.create();
     }
@@ -68,11 +69,12 @@ export class Api extends AbstractApi {
             }
         }
 
-        if (this.authToken && !params.token) {
+        const authToken = this.authTokenStore.getToken();
+        if (authToken && !params.token) {
             if (method === 'GET') {
-                params.token = this.authToken;
+                params.token = authToken;
             } else {
-                url += `?token=${this.authToken}`;
+                url += `?token=${authToken}`;
             }
         }
 
