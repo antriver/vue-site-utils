@@ -2,10 +2,10 @@ import config from '@/config';
 import { showAlert } from './dialogs';
 import { readSessionToken } from './token-store';
 import { Component } from 'vue/types/umd';
-import { TokenStoreInterface } from '@/token-stores/TokenStoreInterface';
+import { TokenStoreInterface } from '../token-stores/TokenStoreInterface';
 import { VueRouter } from 'vue-router/types/router';
 import { Store } from 'vuex';
-import { Api } from '@/classes/Api/Api';
+import { Api } from '../classes/Api/Api';
 
 export function redirectToLogin(component: Component, next: string) {
     const url = `/login${next ? `?next=${encodeURIComponent(next)}` : ''}`;

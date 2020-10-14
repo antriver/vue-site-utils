@@ -3,7 +3,7 @@ import qs from 'qs';
 import cloneDeep from 'lodash/cloneDeep';
 import { AbstractApi } from './AbstractApi';
 import { ApiError } from './ApiError';
-import { TokenStoreInterface } from '@/token-stores/TokenStoreInterface';
+import { TokenStoreInterface } from '../../token-stores/TokenStoreInterface';
 
 const logApiError = (err: ApiError): void => {
     /* global Raven */

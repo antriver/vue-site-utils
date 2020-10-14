@@ -1,5 +1,5 @@
 import config from '@/config';
-import { encodeQueryString } from '@/util/utils';
+import { encodeQueryString } from '../util/utils';
 
 export const MODAL_EVENTS = {
     OPENED: 'MODAL.OPENED',
