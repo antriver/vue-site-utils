@@ -1,10 +1,11 @@
 import config from '@/config';
 import { showAlert } from './dialogs';
-import { readSessionToken, storeSessionToken } from './token-store';
+import { readSessionToken } from './token-store';
 import { Component } from 'vue/types/umd';
 import { TokenStoreInterface } from '@/token-stores/TokenStoreInterface';
 import { VueRouter } from 'vue-router/types/router';
 import { Store } from 'vuex';
+import { Api } from '@/classes/Api/Api';
 
 export function redirectToLogin(component: Component, next: string) {
     const url = `/login${next ? `?next=${encodeURIComponent(next)}` : ''}`;
@@ -83,15 +84,14 @@ export const loginFromResponse = (
     router: VueRouter,
     store: Store,
     response: any,
-    redirect:boolean = true
+    redirect: boolean = true
 ): void => {
     store.commit('auth/setUser', response);
 
     tokenStore.setToken(response.token);
 
-    /* global Raven */
-    if (typeof Raven !== 'undefined') {
-        Raven.setUserContext({
+    if (typeof window.Raven !== 'undefined') {
+        window.Raven.setUserContext({
             username: response.user.username,
             id: response.user.id
         });
@@ -104,12 +104,11 @@ export const loginFromResponse = (
 };
 
 export const logout = (
-    api,
-    store,
-    tokenStore: TokenStoreInterface,
-) => {
-
-    const existingToken = store.state.auth.token;
+    api: Api,
+    store: Store,
+    tokenStore: TokenStoreInterface
+): void => {
+    const existingToken = tokenStore.getToken();
 
     // Tell API to end the session.
     api.delete('auth', { token: existingToken });
@@ -117,10 +116,11 @@ export const logout = (
     // Delete user from store.
     store.commit('auth/setUser', null);
 
+    // Clear saved session token.
     tokenStore.setToken(null);
 
-    if (typeof Raven !== 'undefined') {
-        Raven.setUserContext();
+    if (typeof window.Raven !== 'undefined') {
+        window.Raven.setUserContext();
     }
 };
 

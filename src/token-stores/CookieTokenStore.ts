@@ -17,7 +17,7 @@ export class CookieTokenStore extends AbstractTokenStore implements TokenStoreIn
         return this.cookies.get(this.keyName) || null;
     }
 
-    public setToken(token: string): void {
+    public setToken(token: string | null): void {
         const expires = new Date();
         if (!token) {
             expires.setFullYear(expires.getFullYear() - 5);
