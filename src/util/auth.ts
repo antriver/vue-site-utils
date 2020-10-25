@@ -98,7 +98,7 @@ export const loginFromResponse = (
     }
 
     if (redirect) {
-        const next = store.state.loginRedirect ? store.state.loginRedirect : '/';
+        const next = store.state.auth.loginRedirect ? store.state.auth.loginRedirect : '/';
         router.replace(next);
     }
 };
