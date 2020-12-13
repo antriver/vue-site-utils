@@ -1,5 +1,6 @@
 import LRUCache from 'lru-cache';
 import { TokenStoreInterface } from '../../token-stores/TokenStoreInterface';
+import { ApiRequestOptions } from '@/classes/Api/ApiRequestOptions';
 
 export abstract class AbstractApi {
     protected authTokenStore: TokenStoreInterface;
@@ -22,20 +23,20 @@ export abstract class AbstractApi {
         return `${this.url}/${endpoint}`;
     }
 
-    get(endpoint: string, params?: object, cache?: boolean): Promise<any> {
-        return this.request('GET', endpoint, params, cache);
+    get(endpoint: string, params?: object, options?: ApiRequestOptions): Promise<any> {
+        return this.request('GET', endpoint, params, options);
     }
 
-    post(endpoint: string, params: object): Promise<any> {
-        return this.request('POST', endpoint, params);
+    post(endpoint: string, data: object, options?: ApiRequestOptions): Promise<any> {
+        return this.request('POST', endpoint, data, options);
     }
 
-    patch(endpoint: string, params: object): Promise<any> {
-        return this.request('PATCH', endpoint, params);
+    patch(endpoint: string, data: object, options?: ApiRequestOptions): Promise<any> {
+        return this.request('PATCH', endpoint, data, options);
     }
 
-    delete(endpoint: string, params: object): Promise<any> {
-        return this.request('DELETE', endpoint, params);
+    delete(endpoint: string, data: object, options?: ApiRequestOptions): Promise<any> {
+        return this.request('DELETE', endpoint, data, options);
     }
 
     /**
@@ -44,10 +45,9 @@ export abstract class AbstractApi {
      * @param {String} method
      * @param {String} endpoint
      * @param {object} [data]
-     * @param {boolean} [cache]
-     * @param {object} [headers]
+     * @param {ApiRequestOptions} [options]
      *
      * @return {Promise}
      */
-    abstract request(method: string, endpoint: string, data?: object, cache?: boolean, headers?: object): Promise<any>;
+    abstract request(method: string, endpoint: string, data?: object, options?: ApiRequestOptions): Promise<any>;
 }
