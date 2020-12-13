@@ -1,7 +1,11 @@
 {
-  "name": "@antriver/vue-site-scaffolding",
+  "name": "@antriver/vue-site-utils",
   "version": "1.0.0",
-  "description": "",
+  "description": "A bunch of stuff to help building Vue apps.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antriver/vue-site-utils.git"
+  },
   "main": "index.js",
   "scripts": {
     "build": "rm -rf dist && tsc",
@@ -13,7 +17,7 @@
   "dependencies": {
     "axios": "^0.19.1",
     "date-fns": "^1.30.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "lru-cache": "^5.1.1",
     "qs": "^6.9.1",
     "universal-cookie": "^4.0.3",
@@ -22,13 +26,13 @@
     "vuex": "^3.1.3"
   },
   "devDependencies": {
-    "@digitickets/eslint-config-digitickets": "^1.0.17",
+    "@digitickets/eslint-config-digitickets": "^1.0.23",
     "@types/lodash": "^4.14.149",
     "@types/lru-cache": "^5.1.0",
     "@types/qs": "^6.9.0",
     "@typescript-eslint/eslint-plugin": "^2.16.0",
     "@typescript-eslint/parser": "^2.16.0",
-    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-import-resolver-typescript": "^2.3.0",
     "eslint-plugin-vue": "^6.1.2",
     "typescript": "^3.7.5"
   }
