@@ -45,8 +45,9 @@ export abstract class AbstractApi {
      * @param {String} endpoint
      * @param {object} [data]
      * @param {boolean} [cache]
+     * @param {object} [headers]
      *
      * @return {Promise}
      */
-    abstract request(method: string, endpoint: string, data: object, cache?: boolean): Promise<any>;
+    abstract request(method: string, endpoint: string, data?: object, cache?: boolean, headers?: object): Promise<any>;
 }

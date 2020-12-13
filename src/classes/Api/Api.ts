@@ -40,7 +40,7 @@ export class Api extends AbstractApi {
         this.axios = axios.create();
     }
 
-    request(method: Method, endpoint: string, data: object, cache?: boolean): Promise<any> {
+    request(method: Method, endpoint: string, data?: object, cache?: boolean, headers: object = {}): Promise<any> {
         const startedAt = Date.now();
 
         let url = this.createUrl(endpoint);
@@ -57,7 +57,10 @@ export class Api extends AbstractApi {
 
         cache = method === 'GET' && cache === true;
 
-        const headers = { ...this.headers };
+        headers = {
+            ...this.headers,
+            ...headers
+        };
 
         if (method !== 'GET') {
             // headers['content-type'] = 'application/x-www-form-urlencoded';
