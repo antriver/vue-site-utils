@@ -14,7 +14,7 @@ export function gaEvent(component: any, category: string, action: string, label?
                 hitType: 'event',
                 eventCategory: category,
                 eventAction: action,
-                eventLabel: label
+                eventLabel: label,
             });
         }
     } catch (e) {

@@ -8,7 +8,7 @@ export class CookieTokenStore extends AbstractTokenStore implements TokenStoreIn
         keyName: string,
         protected cookieDomain = '',
         protected cookiePath = '',
-        protected cookieSecure = true
+        protected cookieSecure = true,
     ) {
         super(keyName);
     }
@@ -33,8 +33,8 @@ export class CookieTokenStore extends AbstractTokenStore implements TokenStoreIn
                 domain: this.cookieDomain,
                 expires,
                 path: this.cookiePath,
-                secure: this.cookieSecure
-            }
+                secure: this.cookieSecure,
+            },
         );
     }
 }

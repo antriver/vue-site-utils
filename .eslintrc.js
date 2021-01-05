@@ -5,8 +5,8 @@ module.exports = {
         node: true
     },
     extends: [
-        '@digitickets/eslint-config-digitickets',
-        '@digitickets/eslint-config-digitickets/vue',
+        '@antriver/eslint-config-antriver',
+        '@antriver/eslint-config-antriver/vue',
         'plugin:@typescript-eslint/recommended'
     ],
     parser: 'vue-eslint-parser',

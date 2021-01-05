@@ -25,9 +25,9 @@ const logApiError = (err: ApiError): void => {
                     url: err.request.url,
                     params: err.request.params,
                     headers: err.request.headers,
-                    response: err.response
-                }
-            }
+                    response: err.response,
+                },
+            },
         );
     }
 };
@@ -50,18 +50,18 @@ export class Api extends AbstractApi {
         if (data) {
             // Copy data to a new object so we don't accidentally modify the original during SSR.
             params = {
-                ...data
+                ...data,
             };
         } else {
             params = {};
         }
 
-        //noinspection PointlessBooleanExpressionJS
-        let useCache: boolean = !!(method === 'GET' && options && options.cache === true);
+        // noinspection PointlessBooleanExpressionJS
+        const useCache: boolean = !!(method === 'GET' && options && options.cache === true);
 
-        let headers = {
+        const headers = {
             ...this.headers,
-            ...options?.headers
+            ...options?.headers,
         };
 
         if (method !== 'GET') {
@@ -95,7 +95,7 @@ export class Api extends AbstractApi {
              * @param {object} response
              * @param {boolean} [fromCache]
              */
-            const onSuccess = (response: any, fromCache: boolean) => {
+            const onSuccess = (response: any, fromCache: boolean): void => {
                 if (response.error) {
                     // Handle cases where the server returns an error response with a 200 status.
                     onError(response.error, response);
@@ -114,7 +114,7 @@ export class Api extends AbstractApi {
              * @param {string} message
              * @param {?object} response
              */
-            let onError = (message: string, response: any) => {
+            let onError = (message: string, response: any): void => {
                 if (!response) {
                     // response will always be an object to avoid having to check everywhere.
                     response = {};
@@ -123,7 +123,7 @@ export class Api extends AbstractApi {
                 console.error('[API] Error', method, url, jsonParams, message, response);
 
                 const err = new ApiError(message, response, {
-                    method, url, params, headers
+                    method, url, params, headers,
                 });
                 logApiError(err);
 
@@ -154,22 +154,22 @@ export class Api extends AbstractApi {
             console.log('[API] Request', method, url); // , jsonParams, headers);
 
             this.axios.request({
-                    method,
-                    url,
-                    headers,
-                    timeout: 20000, // 20 seconds
+                method,
+                url,
+                headers,
+                timeout: 20000, // 20 seconds
 
-                    // If data is an object it will be sent as application/json.
-                    // So we convert it to a string and it is sent as application/x-www-form-urlencoded
-                    data: (data instanceof FormData ? data : (method !== 'GET' ? qs.stringify(params) : null)),
-                    // data: method !== 'GET' ? params : null,
+                // If data is an object it will be sent as application/json.
+                // So we convert it to a string and it is sent as application/x-www-form-urlencoded
+                data: (data instanceof FormData ? data : (method !== 'GET' ? qs.stringify(params) : null)),
+                // data: method !== 'GET' ? params : null,
 
-                    // `params` are the URL parameters (query string) to be sent with the request
-                    // Must be a plain object or a URLSearchParams object
-                    params: method === 'GET' ? params : {},
+                // `params` are the URL parameters (query string) to be sent with the request
+                // Must be a plain object or a URLSearchParams object
+                params: method === 'GET' ? params : {},
 
-                    responseType: 'json'
-                })
+                responseType: 'json',
+            })
                 .then((response) => {
                     if (response && typeof response.data === 'object' && response.data) {
                         onSuccess(response.data, false);

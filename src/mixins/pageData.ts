@@ -51,6 +51,6 @@ export const pageDataMixin = {
 
         pdError(): object|null {
             return this.pd && this.pd.error ? this.pd.error : null;
-        }
-    }
+        },
+    },
 };

@@ -6,7 +6,7 @@ export function relativeTime(value: Date|string): string {
     }
     return distanceInWordsStrict(
         value,
-        new Date()
+        new Date(),
     );
 }
 

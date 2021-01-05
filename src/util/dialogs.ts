@@ -6,8 +6,8 @@ export function showAlert(text, btnClass, btnText) {
                 {
                     text,
                     btnClass,
-                    btnText
-                }
+                    btnText,
+                },
             );
         }
         window.alert(text);

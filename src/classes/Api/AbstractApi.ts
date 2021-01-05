@@ -13,7 +13,7 @@ export abstract class AbstractApi {
 
     protected constructor(
         apiUrl: string,
-        authTokenStore: TokenStoreInterface
+        authTokenStore: TokenStoreInterface,
     ) {
         this.url = apiUrl;
         this.authTokenStore = authTokenStore;

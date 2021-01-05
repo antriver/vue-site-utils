@@ -34,4 +34,4 @@ export function callVueOptionFunc(instance: Vue, funcName: string, funcArgs = []
     return instance[funcName](...funcArgs);
 }
 
-export const encodeQueryString = (obj: object) => Object.keys(obj).map(k => `${k}=${encodeURIComponent(obj[k])}`).join('&');
+export const encodeQueryString = (obj: object) => Object.keys(obj).map((k) => `${k}=${encodeURIComponent(obj[k])}`).join('&');

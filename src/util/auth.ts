@@ -34,8 +34,8 @@ export function requireAccount(component, action) {
     return component.$root.$options.$modalFactory.openComponent(
         'SignupModal',
         {
-            action
-        }
+            action,
+        },
     ).then((user) => {
         if (user) {
             // TODO: Return here if the user was recently created.
@@ -59,8 +59,8 @@ export function showSignupCompleteModal(component, user, text) {
         'SignupCompleteModal',
         {
             user,
-            text
-        }
+            text,
+        },
     ).then(() => {
     });
 }
@@ -84,7 +84,7 @@ export const loginFromResponse = (
     router: VueRouter,
     store: Store,
     response: any,
-    redirect: boolean = true
+    redirect: boolean = true,
 ): void => {
     store.commit('auth/setUser', response);
 
@@ -93,7 +93,7 @@ export const loginFromResponse = (
     if (typeof window.Raven !== 'undefined') {
         window.Raven.setUserContext({
             username: response.user.username,
-            id: response.user.id
+            id: response.user.id,
         });
     }
 
@@ -106,7 +106,7 @@ export const loginFromResponse = (
 export const logout = (
     api: Api,
     store: Store,
-    tokenStore: TokenStoreInterface
+    tokenStore: TokenStoreInterface,
 ): void => {
     const existingToken = tokenStore.getToken();
 
@@ -144,8 +144,8 @@ export function checkUserCookie(cookies, store, api) {
                     'auth',
                     {
                         token: sessionTokenCookie,
-                        extraAuthInfo: 1
-                    }
+                        extraAuthInfo: 1,
+                    },
                 )
                     .then((response) => {
                         if (response.user) {
@@ -157,7 +157,7 @@ export function checkUserCookie(cookies, store, api) {
                                 user: response.user,
                                 token: response.token,
                                 userGlobalOptions: response.userGlobalOptions,
-                                rightColBox: response.rightColBox
+                                rightColBox: response.rightColBox,
                             });
 
                             resolve(response);
@@ -185,7 +185,7 @@ export const addUnverifiedEmailAlert = (store, userGlobalOptions) => {
             id: 'unverified-user',
             type: 'info',
             btnText: 'Help',
-            text: '<i class="fa fa-envelope"></i> You need to verify your email address before you can use all the features. We\'ve emailed you a link to do this.'
+            text: '<i class="fa fa-envelope"></i> You need to verify your email address before you can use all the features. We\'ve emailed you a link to do this.',
         });
     }
 };

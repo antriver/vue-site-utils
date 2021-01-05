@@ -48,7 +48,7 @@ export function handleClicksWithVue(component) {
             // some sanity checks taken from vue-router:
             // https://github.com/vuejs/vue-router/blob/dev/src/components/link.js#L106
             const {
-                altKey, ctrlKey, metaKey, shiftKey, button, defaultPrevented
+                altKey, ctrlKey, metaKey, shiftKey, button, defaultPrevented,
             } = event;
             // don't handle with control keys
             if (metaKey || altKey || ctrlKey || shiftKey) return;

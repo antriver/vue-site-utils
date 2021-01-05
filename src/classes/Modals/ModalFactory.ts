@@ -1,19 +1,18 @@
-import config from '@/config';
 import { encodeQueryString } from '../util/utils';
+import { ModalConfigInterface } from './ModalConfigInterface';
+import { Store } from 'vuex';
 
 export const MODAL_EVENTS = {
     OPENED: 'MODAL.OPENED',
     REJECT: 'MODAL.REJECT',
-    RESOLVE: 'MODAL.RESOLVE'
+    RESOLVE: 'MODAL.RESOLVE',
 };
 
 export class ModalFactory {
-    /**
-     * @param {Store} store
-     */
-    constructor(store) {
-        this.store = store;
-
+    constructor(
+        private config: ModalConfigInterface,
+        private store: Store<any>,
+    ) {
         window.addEventListener('message', ({ data }) => {
             if (!data.modalId) {
                 return;
@@ -43,7 +42,7 @@ export class ModalFactory {
         });
     }
 
-    close(modalId) {
+    close(modalId: string) {
         this.store.commit('setOpenModal', { modalId });
     }
 
@@ -54,17 +53,17 @@ export class ModalFactory {
      *
      * @return {Promise}
      */
-    open(path, params = {}, onReady) {
+    open(path: sring, params = {}, onReady: Function) {
         return new Promise((resolve, reject) => {
             const modalId = ModalFactory.generateId();
             const query = {
 
                 ...params,
                 modalId,
-                token: this.store.state.auth.token
+                token: this.store.state.auth.token,
             };
 
-            const url = `${config.modalUrl + path}?${encodeQueryString(query)}`;
+            const url = `${this.config.remoteModalUrl + path}?${encodeQueryString(query)}`;
 
             this.store.commit('setOpenModal', {
                 modalId,
@@ -72,17 +71,17 @@ export class ModalFactory {
                     component: 'IframeModal',
                     props: {
                         url,
-                        loading: true
+                        loading: true,
                     },
-                    resolve: d => resolve(d),
-                    reject: d => reject(d),
-                    onReady
-                }
+                    resolve: (d) => resolve(d),
+                    reject: (d) => reject(d),
+                    onReady,
+                },
             });
         });
     }
 
-    openComponent(component, props = {}) {
+    openComponent(component: string, props = {}) {
         const modalId = ModalFactory.generateId();
 
         const promise = new Promise((resolve, reject) => {
@@ -95,10 +94,10 @@ export class ModalFactory {
                         {
                             modalId,
                             resolve,
-                            reject
-                        }
-                    )
-                }
+                            reject,
+                        },
+                    ),
+                },
             });
         });
 

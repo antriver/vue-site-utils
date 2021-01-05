@@ -45,16 +45,16 @@ export function smoothScrollToElement(element, callback) {
                     scrollEl,
                     targetY,
                     150,
-                    callback
+                    callback,
                 );
-            }
+            },
         );
     } else {
         scrollElementTo(
             scrollEl,
             targetY,
             300,
-            callback
+            callback,
         );
     }
 }

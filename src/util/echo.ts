@@ -10,11 +10,11 @@ export function createEchoInstance(authToken) {
         {
             auth: {
                 headers: {
-                    Authorization: (authToken ? `Bearer ${authToken}` : '')
-                }
+                    Authorization: (authToken ? `Bearer ${authToken}` : ''),
+                },
             },
             broadcaster: 'socket.io',
-            host: `${config.socketHost}/`
-        }
+            host: `${config.socketHost}/`,
+        },
     );
 }

@@ -12,7 +12,7 @@ export function resetBg(vuexStore, $ssrContext = null) {
             opts.bgColor,
             opts.bgColorTheme,
             opts.bgPattern,
-            opts.darkMode
+            opts.darkMode,
         );
     } else {
         setBg();
@@ -34,7 +34,7 @@ export function setBg(
     bgColor,
     bgColorTheme,
     bgPattern,
-    darkMode
+    darkMode,
 ) {
     const bgColorStyle = bgColor
         ? `<style id="bg-color-style">.bg-color { background: #${bgColor}; }</style>`

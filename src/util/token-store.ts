@@ -28,7 +28,7 @@ export function storeSessionToken(token) {
             domain: cfg.cookieDomain,
             expires,
             path: cfg.sessionCookiePath,
-            secure: cfg.sessionCookieSecure
-        }
+            secure: cfg.sessionCookieSecure,
+        },
     );
 }
