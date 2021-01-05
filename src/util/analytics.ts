@@ -5,7 +5,7 @@
  * @param {string} [label]
  * @param {number} [value]
  */
-export function gaEvent(component, category, action, label, value) {
+export function gaEvent(component: any, category: string, action: string, label?: string, value?: number) {
     try {
         if (component && component.$ga) {
             component.$ga.event(category, action, label, value);
