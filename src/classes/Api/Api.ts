@@ -4,7 +4,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { AbstractApi } from './AbstractApi';
 import { ApiError } from './ApiError';
 import { TokenStoreInterface } from '../../token-stores/TokenStoreInterface';
-import { ApiRequestOptions } from '@/classes/Api/ApiRequestOptions';
+import { ApiRequestOptions } from './ApiRequestOptions';
 
 const logApiError = (err: ApiError): void => {
     /* global Raven */

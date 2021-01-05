@@ -1,4 +1,4 @@
-import { ApiRequest } from '@/classes/Api/ApiRequest';
+import { ApiRequest } from './ApiRequest';
 
 export class ApiError extends Error {
     public response: any;

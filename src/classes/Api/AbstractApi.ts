@@ -1,6 +1,6 @@
 import LRUCache from 'lru-cache';
 import { TokenStoreInterface } from '../../token-stores/TokenStoreInterface';
-import { ApiRequestOptions } from '@/classes/Api/ApiRequestOptions';
+import { ApiRequestOptions } from './ApiRequestOptions';
 
 export abstract class AbstractApi {
     protected authTokenStore: TokenStoreInterface;
