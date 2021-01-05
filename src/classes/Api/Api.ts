@@ -4,6 +4,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { AbstractApi } from './AbstractApi';
 import { ApiError } from './ApiError';
 import { TokenStoreInterface } from '../../token-stores/TokenStoreInterface';
+import { ApiRequestOptions } from '@/classes/Api/ApiRequestOptions';
 
 const logApiError = (err: ApiError): void => {
     /* global Raven */
@@ -40,10 +41,10 @@ export class Api extends AbstractApi {
         this.axios = axios.create();
     }
 
-    request(method: Method, endpoint: string, data?: object, cache?: boolean, headers: object = {}): Promise<any> {
+    request(method: Method, endpoint: string, data?: object | FormData, options?: ApiRequestOptions): Promise<any> {
         const startedAt = Date.now();
 
-        let url = this.createUrl(endpoint);
+        let url: string = this.createUrl(endpoint);
 
         let params: any;
         if (data) {
@@ -55,11 +56,12 @@ export class Api extends AbstractApi {
             params = {};
         }
 
-        cache = method === 'GET' && cache === true;
+        //noinspection PointlessBooleanExpressionJS
+        let useCache: boolean = !!(method === 'GET' && options && options.cache === true);
 
-        headers = {
+        let headers = {
             ...this.headers,
-            ...headers
+            ...options?.headers
         };
 
         if (method !== 'GET') {
@@ -84,7 +86,7 @@ export class Api extends AbstractApi {
         const jsonParams = JSON.stringify(params);
 
         let cacheKey: string;
-        if (cache === true) {
+        if (useCache) {
             cacheKey = url + jsonParams;
         }
 
@@ -101,7 +103,7 @@ export class Api extends AbstractApi {
                 }
 
                 // Store in the cache.
-                if (!fromCache && cache === true && this.cache) {
+                if (!fromCache && useCache && this.cache) {
                     this.cache.set(cacheKey, response);
                 }
 
@@ -138,7 +140,7 @@ export class Api extends AbstractApi {
             };
 
             // Check the cache for an existing result.
-            if (cache === true && this.cache) {
+            if (useCache && this.cache) {
                 // Check for a cached copy of this request.
                 const cachedResult = this.cache.get(cacheKey);
                 if (cachedResult) {
@@ -152,22 +154,22 @@ export class Api extends AbstractApi {
             console.log('[API] Request', method, url); // , jsonParams, headers);
 
             this.axios.request({
-                method,
-                url,
-                headers,
-                timeout: 20000, // 20 seconds
+                    method,
+                    url,
+                    headers,
+                    timeout: 20000, // 20 seconds
 
-                // If data is an object it will be sent as application/json.
-                // So we convert it to a string and it is sent as application/x-www-form-urlencoded
-                data: method !== 'GET' ? qs.stringify(params) : null,
-                // data: method !== 'GET' ? params : null,
+                    // If data is an object it will be sent as application/json.
+                    // So we convert it to a string and it is sent as application/x-www-form-urlencoded
+                    data: (data instanceof FormData ? data : (method !== 'GET' ? qs.stringify(params) : null)),
+                    // data: method !== 'GET' ? params : null,
 
-                // `params` are the URL parameters (query string) to be sent with the request
-                // Must be a plain object or a URLSearchParams object
-                params: method === 'GET' ? params : {},
+                    // `params` are the URL parameters (query string) to be sent with the request
+                    // Must be a plain object or a URLSearchParams object
+                    params: method === 'GET' ? params : {},
 
-                responseType: 'json'
-            })
+                    responseType: 'json'
+                })
                 .then((response) => {
                     if (response && typeof response.data === 'object' && response.data) {
                         onSuccess(response.data, false);

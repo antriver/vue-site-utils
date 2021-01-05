@@ -1,11 +1,4 @@
-import { Method } from 'axios';
-
-export interface ApiRequest {
-    method: Method;
-    url: string;
-    params?: any;
-    headers?: any;
-}
+import { ApiRequest } from '@/classes/Api/ApiRequest';
 
 export class ApiError extends Error {
     public response: any;
