@@ -1,5 +1,5 @@
 import { TokenStoreInterface } from '../token-stores/TokenStoreInterface';
-import { VueRouter } from 'vue-router/types/router';
+import { NavigationGuard, NavigationGuardNext, VueRouter } from 'vue-router/types/router';
 import { Store } from 'vuex';
 import { Api } from '../classes/Api/Api';
 import { User, UserGlobalOptions } from '../models/User';
@@ -157,8 +157,8 @@ export function loadUserFromStoredToken(
 /**
  * Returns a function that can be used as a beforeEnter filter in Vue router.
  */
-export function createAuthGuard(store: Store<AuthStore>): Function {
-    return (to: Route, from: Route, next: Function): void => {
+export function createAuthGuard(store: Store<AuthStore>): NavigationGuard {
+    return (to: Route, from: Route, next: NavigationGuardNext): void => {
         const promise = (window as any).existingAuthPromise || Promise.resolve();
         promise.finally(() => {
             if (getCurrentUser(store)) {
