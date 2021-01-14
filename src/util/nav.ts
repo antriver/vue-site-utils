@@ -1,6 +1,8 @@
 import { scrollToElement } from './dom';
+import VueRouter from 'vue-router';
+import { ModalFactory } from '../classes/Modals/ModalFactory';
 
-export function set404(component) {
+export function set404(component: any): void {
     component.$root.$options.$shouldReloadOnNavigation = true;
     if (component.$ssrContext) {
         // Tell SSR to set response code to 404 (this is custom, also see server.js)
@@ -8,15 +10,15 @@ export function set404(component) {
     }
 }
 
-export function handleClicksWithVue(component) {
+export function handleClicksWithVue(router: VueRouter, modalFactory: ModalFactory): void {
     document.addEventListener('click', (event) => {
-        const { target } = event;
+        const target: EventTarget = event.target;
 
-        const aTarget = target.closest('a');
+        const aTarget = (target as HTMLElement).closest('a');
         if (aTarget) {
             const lightboxUrl = aTarget.getAttribute('data-lightbox');
             if (lightboxUrl) {
-                component.$root.$options.$modalFactory.openComponent('LightboxModal', { src: lightboxUrl });
+                modalFactory.openComponent('LightboxModal', { src: lightboxUrl });
                 event.preventDefault();
                 event.stopPropagation();
                 return;
@@ -25,7 +27,7 @@ export function handleClicksWithVue(component) {
 
         // Listen for clicks on <a>s that should be intercepted and managed with vue-router
         // https://dennisreimann.de/articles/delegating-html-links-to-vue-router.html
-        const hrefTarget = target.closest('a:not([href*=\'://\'])');
+        const hrefTarget: HTMLAnchorElement|null = (target as HTMLElement).closest('a:not([href*=\'://\'])');
         if (hrefTarget && hrefTarget.href && hrefTarget.getAttribute('rel') !== 'external') {
             const hrefAttr = hrefTarget.getAttribute('href');
 
@@ -35,7 +37,7 @@ export function handleClicksWithVue(component) {
                     console.log('Handled link by scrolling', hrefAttr);
                     event.preventDefault();
                     event.stopPropagation();
-                    component.$router.push(hrefAttr);
+                    router.push(hrefAttr);
                     return;
                 }
             }
@@ -65,7 +67,7 @@ export function handleClicksWithVue(component) {
             if (window.location.pathname !== hrefAttr && event.preventDefault) {
                 event.preventDefault();
                 console.log('Handling link with router', hrefAttr);
-                component.$router.push(hrefAttr);
+                router.push(hrefAttr);
             }
         }
     });

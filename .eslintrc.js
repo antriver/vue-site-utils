@@ -2,52 +2,37 @@ module.exports = {
     root: true,
     env: {
         browser: true,
-        node: true
+        node: true,
     },
     extends: [
         '@antriver/eslint-config-antriver',
         '@antriver/eslint-config-antriver/vue',
-        'plugin:@typescript-eslint/eslint-recommended',
-        'plugin:@typescript-eslint/recommended',
+        '@antriver/eslint-config-antriver/typescript',
     ],
     parser: 'vue-eslint-parser',
     parserOptions: {
-        parser: '@typescript-eslint/parser'
+        parser: '@typescript-eslint/parser',
     },
+    plugins: [
+        '@typescript-eslint/eslint-plugin',
+    ],
     rules: {
-        'vue/script-indent': [
-            'error',
-            4,
-            {
-                baseIndent: 0,
-                switchCase: 1
-            }
-        ],
-        '@typescript-eslint/no-explicit-any': [
-            'off'
-        ],
-
-        '@typescript-eslint/ban-ts-ignore': 'off',
-        '@typescript-eslint/ban-ts-comment': 'off',
-
-        "no-useless-constructor": "off",
-        "@typescript-eslint/no-useless-constructor": "error",
-        "@typescript-eslint/explicit-function-return-type": ["error"]
+        '@typescript-eslint/ban-types': 'off',
     },
     overrides: [
         {
             files: [
                 '**/__tests__/*.{j,t}s?(x)',
-                '**/tests/unit/**/*.spec.{j,t}s?(x)'
+                '**/tests/unit/**/*.spec.{j,t}s?(x)',
             ],
             env: {
-                jest: true
-            }
-        }
+                jest: true,
+            },
+        },
     ],
     settings: {
         'import/resolver': {
-            typescript: {}
-        }
+            typescript: {},
+        },
     },
 };

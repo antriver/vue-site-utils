@@ -1,8 +1,4 @@
-/**
- * @param {HTMLElement} element
- * @return {{top: number, left: number}}
- */
-export function getElementOffset(element: HTMLElement) {
+export function getElementOffset(element: HTMLElement): {top: number, left: number} {
     const de = document.documentElement;
     const box = element.getBoundingClientRect();
     const top = box.top + window.pageYOffset - de.clientTop;
@@ -10,11 +6,11 @@ export function getElementOffset(element: HTMLElement) {
     return { top, left };
 }
 
-function scrollOffsetTop() {
+function scrollOffsetTop(): number {
     return window.innerWidth < 992 ? 62 : 72;
 }
 
-export function scrollToElement(id: string) {
+export function scrollToElement(id: string): boolean {
     const domElement = document.getElementById(id);
     if (domElement) {
         document.getElementsByTagName('html')[0].scrollTop = getElementOffset(domElement).top - scrollOffsetTop();
@@ -29,7 +25,7 @@ export function scrollToElement(id: string) {
  * @param {Element|HTMLElement} element
  * @param {function} [callback]
  */
-export function smoothScrollToElement(element: HTMLElement, callback?: Function) {
+export function smoothScrollToElement(element: HTMLElement, callback?: Function): void {
     const targetY = getElementOffset(element).top - scrollOffsetTop();
     const scrollEl = document.getElementsByTagName('html')[0];
     const currentDiff = scrollEl.scrollTop - targetY;
@@ -62,15 +58,17 @@ export function smoothScrollToElement(element: HTMLElement, callback?: Function)
 /**
  * Scroll the given element to the given y position smoothly.
  */
-export function scrollElementTo(element: HTMLElement, to: number, duration: number, callback?: Function) {
+export function scrollElementTo(element: HTMLElement, to: number, duration: number, callback?: Function): void {
     if (duration <= 0) return;
     const difference = to - element.scrollTop;
-    const perTick = difference / duration * 10;
+    const perTick = (difference / duration) * 10;
 
     setTimeout(() => {
         element.scrollTop += perTick;
         if (element.scrollTop === to) {
-            callback && callback();
+            if (callback) {
+                callback();
+            }
             return;
         }
         scrollElementTo(element, to, duration - 10, callback);

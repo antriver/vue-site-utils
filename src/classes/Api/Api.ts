@@ -57,8 +57,7 @@ export class Api extends AbstractApi {
             params = {};
         }
 
-        // noinspection PointlessBooleanExpressionJS
-        const useCache: boolean = !!(method === 'GET' && options && options.cache === true);
+        const useCache = !!(method === 'GET' && options && options.cache === true);
 
         const headers = {
             ...this.headers,
@@ -136,7 +135,7 @@ export class Api extends AbstractApi {
                 reject(err);
             };
 
-            const onComplete = () => {
+            const onComplete = (): void => {
                 console.log(`[API] Request took ${Date.now() - startedAt}ms`, method, url, jsonParams);
             };
 
@@ -154,6 +153,13 @@ export class Api extends AbstractApi {
 
             console.log('[API] Request', method, url); // , jsonParams, headers);
 
+            let requestData = null;
+            if (data instanceof FormData) {
+                requestData = data;
+            } else if (method !== 'GET') {
+                requestData = qs.stringify(params);
+            }
+
             this.axios.request({
                 method,
                 url,
@@ -162,7 +168,7 @@ export class Api extends AbstractApi {
 
                 // If data is an object it will be sent as application/json.
                 // So we convert it to a string and it is sent as application/x-www-form-urlencoded
-                data: (data instanceof FormData ? data : (method !== 'GET' ? qs.stringify(params) : null)),
+                data: requestData,
                 // data: method !== 'GET' ? params : null,
 
                 // `params` are the URL parameters (query string) to be sent with the request

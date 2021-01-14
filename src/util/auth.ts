@@ -3,6 +3,22 @@ import { VueRouter } from 'vue-router/types/router';
 import { Store } from 'vuex';
 import { Api } from '../classes/Api/Api';
 
+export interface UserGlobalOptions {
+    bgColor?: string,
+    bgColorTheme?: string;
+    bgPattern?: string;
+    darkMode?: boolean;
+}
+
+export interface AuthStore {
+    auth: {
+        currentUser?: any;
+        token?: string;
+        loginRedirect?: string;
+        currentUserGlobalOptions?: UserGlobalOptions;
+    }
+}
+
 export function redirectToLogin(next: string, router?: VueRouter): void {
     const url = `/login${next ? `?next=${encodeURIComponent(next)}` : ''}`;
     if (router) {
@@ -12,7 +28,7 @@ export function redirectToLogin(next: string, router?: VueRouter): void {
     }
 }
 
-export function requireAuth(store: Store<any>, router: VueRouter, next: string): Promise<void> {
+export function requireAuth(store: Store<AuthStore>, router: VueRouter, next: string): Promise<void> {
     return new Promise((resolve, reject) => {
         if (store.state.auth.currentUser) {
             resolve();
@@ -25,7 +41,7 @@ export function requireAuth(store: Store<any>, router: VueRouter, next: string):
 
 export const loginFromResponse = (
     tokenStore: TokenStoreInterface,
-    store: Store<any>,
+    store: Store<AuthStore>,
     response: any,
     router?: VueRouter,
     redirect = true,
@@ -51,7 +67,7 @@ export const loginFromResponse = (
 
 export const logout = (
     api: Api,
-    store: Store<any>,
+    store: Store<AuthStore>,
     tokenStore: TokenStoreInterface,
 ): void => {
     const existingToken = tokenStore.getToken();
@@ -72,8 +88,12 @@ export const logout = (
     }
 };
 
-export function loadUserFromStoredToken(tokenStore: TokenStoreInterface, store: Store<any>, api: Api): Promise<any> {
-    return new Promise((resolve, reject) => {
+export function loadUserFromStoredToken(
+    tokenStore: TokenStoreInterface,
+    store: Store<AuthStore>,
+    api: Api,
+): Promise<any> {
+    return new Promise((resolve) => {
         try {
             // User is already set.
             // This was probably set by SSR.

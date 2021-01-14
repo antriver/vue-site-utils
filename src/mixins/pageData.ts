@@ -19,7 +19,7 @@ import { Route } from 'vue-router';
  * The function should return a string which is a key in vuex that will be used to store the data for that page.
  */
 export const pageDataMixin = {
-    beforeRouteLeave(to: Route, from: Route|null, next: Function) {
+    beforeRouteLeave(to: Route, from: Route|null, next: Function): void {
         if (!!this.$options.pageDataKey && this.$options.clearPageDataOnRouteLeave !== false) {
             const key = this.$options.pageDataKey(from);
             this.$store.dispatch('scheduleClearPageData', { key });
@@ -27,7 +27,7 @@ export const pageDataMixin = {
         next();
     },
 
-    beforeRouteUpdate(to: Route, from: Route|null, next: Function) {
+    beforeRouteUpdate(to: Route, from: Route|null, next: Function): void {
         if (
             typeof this.$options.clearPageDataOnRouteUpdate === 'function'
             && this.$options.clearPageDataOnRouteUpdate(to, from) === true

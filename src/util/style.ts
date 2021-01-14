@@ -1,14 +1,17 @@
+import { Store } from 'vuex';
+import { AuthStore } from './auth';
+
 /**
- * Reset the background to the current user's selection, or the default
+ * Reset the background to the current user's selection, or the default.
  *
- * @param vuexStore
- * @param [$ssrContext]
+ * @param store
+ * @param ssrContext
  */
-export function resetBg(vuexStore, $ssrContext = null) {
-    if (vuexStore.state.auth.currentUserGlobalOptions) {
-        const opts = vuexStore.state.auth.currentUserGlobalOptions;
+export function resetBg(store: Store<AuthStore>, ssrContext: any = null): void {
+    if (store.state.auth.currentUserGlobalOptions) {
+        const opts = store.state.auth.currentUserGlobalOptions;
         setBg(
-            $ssrContext,
+            ssrContext,
             opts.bgColor,
             opts.bgColorTheme,
             opts.bgPattern,
@@ -19,33 +22,33 @@ export function resetBg(vuexStore, $ssrContext = null) {
     }
 }
 
-//
-// Change the background colour / theme.
-// Can be called during SSR or in the client.
-//
-// @param $ssrContext
-// @param bgColor
-// @param bgColorTheme
-// @param bgPattern
-// @param darkMode
-//
+/**
+ * Change the background colour / theme.
+ * Can be called during SSR or in the client.
+ *
+ * @param ssrContext
+ * @param bgColor
+ * @param bgColorTheme
+ * @param bgPattern
+ * @param darkMode
+ */
 export function setBg(
-    $ssrContext,
-    bgColor,
-    bgColorTheme,
-    bgPattern,
-    darkMode,
-) {
+    ssrContext?: any,
+    bgColor?: string,
+    bgColorTheme?: string,
+    bgPattern?: string,
+    darkMode?: boolean,
+):void {
     const bgColorStyle = bgColor
         ? `<style id="bg-color-style">.bg-color { background: #${bgColor}; }</style>`
         : '';
 
-    if ($ssrContext) {
-        // Things in $ssrContext get output in the index.html template.
-        $ssrContext.bgColorStyle = bgColorStyle;
-        $ssrContext.bgColorTheme = bgColor ? 'none' : bgColorTheme;
-        $ssrContext.bgPattern = bgPattern;
-        $ssrContext.darkModeClass = darkMode ? 'dark-mode' : '';
+    if (ssrContext) {
+        // Things in ssrContext get output in the index.html template.
+        ssrContext.bgColorStyle = bgColorStyle;
+        ssrContext.bgColorTheme = bgColor ? 'none' : bgColorTheme;
+        ssrContext.bgPattern = bgPattern;
+        ssrContext.darkModeClass = darkMode ? 'dark-mode' : '';
     } else {
         if (bgColor) {
             // Set to an empty value so the theme element get hidden.

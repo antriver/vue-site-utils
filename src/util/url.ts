@@ -1,1 +1,1 @@
-export const encodeQueryString = (obj) => Object.keys(obj).map((k) => `${k}=${encodeURIComponent(obj[k])}`).join('&');
+export const encodeQueryString = (obj: Record<string, string>): string => Object.keys(obj).map((k) => `${k}=${encodeURIComponent(obj[k])}`).join('&');

@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import config from '@/config';
 import LaravelEcho from 'laravel-echo';
 

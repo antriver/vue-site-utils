@@ -1,4 +1,4 @@
-import { encodeQueryString } from '../../util/utils';
+import { encodeQueryString } from '../../util/url';
 import { ModalConfigInterface } from './ModalConfigInterface';
 import { Store } from 'vuex';
 
@@ -42,7 +42,7 @@ export class ModalFactory {
         });
     }
 
-    close(modalId: string) {
+    close(modalId: string): void {
         this.store.commit('setOpenModal', { modalId });
     }
 
@@ -53,7 +53,7 @@ export class ModalFactory {
      *
      * @return {Promise}
      */
-    open(path: string, params = {}, onReady: Function) {
+    open(path: string, params = {}, onReady: Function): Promise<any> {
         return new Promise((resolve, reject) => {
             const modalId = ModalFactory.generateId();
             const query = {
@@ -73,15 +73,15 @@ export class ModalFactory {
                         url,
                         loading: true,
                     },
-                    resolve: (d: any) => resolve(d),
-                    reject: (d: any) => reject(d),
+                    resolve: (d: any): void => resolve(d),
+                    reject: (d: any): void => reject(d),
                     onReady,
                 },
             });
         });
     }
 
-    openComponent(component: string, props = {}) {
+    openComponent(component: string, props = {}): Promise<any> {
         const modalId = ModalFactory.generateId();
 
         const promise = new Promise((resolve, reject) => {
@@ -108,7 +108,7 @@ export class ModalFactory {
         return promise;
     }
 
-    hideLoadingSpinner(modalId: string) {
+    hideLoadingSpinner(modalId: string): void {
         const openModal = this.store.state.openModals[modalId];
         if (openModal) {
             openModal.props.loading = false;
