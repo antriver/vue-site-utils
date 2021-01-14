@@ -26,7 +26,11 @@ export function getCurrentUser(store: Store<AuthStore>): User|null {
     return store.state.auth.currentUser || null;
 }
 
-export function ensureLoggedInOrRedirectToLogin(store: Store<AuthStore>, router: VueRouter, next: string): Promise<User> {
+export function ensureLoggedInOrRedirectToLogin(
+    store: Store<AuthStore>,
+    router: VueRouter,
+    next: string,
+):Promise<User> {
     return new Promise((resolve, reject) => {
         const user = getCurrentUser(store);
         if (user) {
