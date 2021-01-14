@@ -2,17 +2,11 @@ import { TokenStoreInterface } from '../token-stores/TokenStoreInterface';
 import { VueRouter } from 'vue-router/types/router';
 import { Store } from 'vuex';
 import { Api } from '../classes/Api/Api';
-
-export interface UserGlobalOptions {
-    bgColor?: string,
-    bgColorTheme?: string;
-    bgPattern?: string;
-    darkMode?: boolean;
-}
+import { User, UserGlobalOptions } from '../models/User';
 
 export interface AuthStore {
     auth: {
-        currentUser?: any;
+        currentUser?: User;
         token?: string;
         loginRedirect?: string;
         currentUserGlobalOptions?: UserGlobalOptions;
@@ -28,23 +22,20 @@ export function redirectToLogin(next: string, router?: VueRouter): void {
     }
 }
 
-export function checkAuth(store: Store<AuthStore>): Promise<any> {
-    return new Promise((resolve, reject) => {
-        if (store.state.auth.currentUser) {
-            resolve(store.state.auth.currentUser);
-            return;
-        }
-
-        reject();
-    });
+export function getCurrentUser(store: Store<AuthStore>): User|null {
+    return store.state.auth.currentUser || null;
 }
 
-export function redirectToLoginIfNotAuthd(store: Store<AuthStore>, router: VueRouter, next: string): Promise<void> {
-    return checkAuth(store)
-        .catch((err) => {
-            redirectToLogin(next, router);
-            throw err;
-        });
+export function ensureLoggedInOrRedirectToLogin(store: Store<AuthStore>, router: VueRouter, next: string): Promise<User> {
+    return new Promise((resolve, reject) => {
+        const user = getCurrentUser(store);
+        if (user) {
+            resolve(user);
+        }
+
+        redirectToLogin(next, router);
+        reject();
+    });
 }
 
 export const loginFromResponse = (
@@ -100,24 +91,26 @@ export function loadUserFromStoredToken(
     tokenStore: TokenStoreInterface,
     store: Store<AuthStore>,
     api: Api,
-): Promise<any> {
-    return new Promise((resolve) => {
+): Promise<User|null> {
+    return new Promise((resolve, reject) => {
+        // User is already set.
+        // This was probably set by SSR.
+        if (store.state.auth.currentUser) {
+            console.debug('[Auth]', 'User already set');
+            resolve(store.state.auth.currentUser);
+            return;
+        }
+
+        // Check for session cookie in request. If there is one check the current user.
+        const authToken = tokenStore.getToken();
+        if (!authToken) {
+            console.debug('[Auth]', 'No existing auth token');
+            // This resolves will null because it is not an error. Having no user is valid.
+            resolve(null);
+            return;
+        }
+
         try {
-            // User is already set.
-            // This was probably set by SSR.
-            if (store.state.auth.currentUser) {
-                console.debug('[Auth]', 'User already set');
-                resolve(store.state.auth.currentUser);
-                return;
-            }
-
-            // Check for session cookie in request. If there is one check the current user.
-            const authToken = tokenStore.getToken();
-            if (!authToken) {
-                resolve(null);
-                return;
-            }
-
             console.debug('[Auth]', 'Loaded existing token', authToken);
 
             api.get(
@@ -141,13 +134,17 @@ export function loadUserFromStoredToken(
                         resolve(response);
                     }
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.debug('[Auth]', 'Existing auth token no good', err);
+
+                    // Remove the saved token.
+                    tokenStore.setToken(null);
+
                     // No user. But this isn't an error, just resolve null.
-                    // TODO: Must reject if there is an error communicating!
                     resolve(null);
                 });
         } catch (e) {
-            resolve(null);
+            reject(e);
         }
     });
 }
