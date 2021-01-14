@@ -22,21 +22,29 @@ export interface AuthStore {
 export function redirectToLogin(next: string, router?: VueRouter): void {
     const url = `/login${next ? `?next=${encodeURIComponent(next)}` : ''}`;
     if (router) {
-        router.push(url);
+        router.replace(url);
     } else {
         window.location.href = url;
     }
 }
 
-export function requireAuth(store: Store<AuthStore>, router: VueRouter, next: string): Promise<void> {
+export function checkAuth(store: Store<AuthStore>): Promise<any> {
     return new Promise((resolve, reject) => {
         if (store.state.auth.currentUser) {
-            resolve();
-        } else {
-            redirectToLogin(next, router);
-            reject();
+            resolve(store.state.auth.currentUser);
+            return;
         }
+
+        reject();
     });
+}
+
+export function redirectToLoginIfNotAuthd(store: Store<AuthStore>, router: VueRouter, next: string): Promise<void> {
+    return checkAuth(store)
+        .catch((err) => {
+            redirectToLogin(next, router);
+            throw err;
+        });
 }
 
 export const loginFromResponse = (
