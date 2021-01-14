@@ -3,6 +3,7 @@ import { VueRouter } from 'vue-router/types/router';
 import { Store } from 'vuex';
 import { Api } from '../classes/Api/Api';
 import { User, UserGlobalOptions } from '../models/User';
+import { Route } from 'vue-router';
 
 export interface AuthStore {
     auth: {
@@ -151,4 +152,22 @@ export function loadUserFromStoredToken(
             reject(e);
         }
     });
+}
+
+/**
+ * Returns a function that can be used as a beforeEnter filter in Vue router.
+ */
+export function createAuthGuard(store: Store<AuthStore>): Function {
+    return (to: Route, from: Route, next: Function): void => {
+        const promise = (window as any).existingAuthPromise || Promise.resolve();
+        promise.finally(() => {
+            if (getCurrentUser(store)) {
+                console.log('[AuthGuard] Logged in');
+                next();
+            } else {
+                console.log('[AuthGuard] Not logged in. Redirecting to login.');
+                next(`/login?next=${encodeURIComponent(to.fullPath)}`);
+            }
+        });
+    };
 }
