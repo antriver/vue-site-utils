@@ -5,7 +5,7 @@ import LaravelEcho from 'laravel-echo';
  * @param authToken
  * @return {Echo}
  */
-export function createEchoInstance(authToken) {
+export function createEchoInstance(authToken: string): LaravelEcho {
     return new LaravelEcho(
         {
             auth: {

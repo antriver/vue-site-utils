@@ -1,4 +1,4 @@
-import { encodeQueryString } from '../util/utils';
+import { encodeQueryString } from '../../util/utils';
 import { ModalConfigInterface } from './ModalConfigInterface';
 import { Store } from 'vuex';
 
@@ -53,7 +53,7 @@ export class ModalFactory {
      *
      * @return {Promise}
      */
-    open(path: sring, params = {}, onReady: Function) {
+    open(path: string, params = {}, onReady: Function) {
         return new Promise((resolve, reject) => {
             const modalId = ModalFactory.generateId();
             const query = {
@@ -73,8 +73,8 @@ export class ModalFactory {
                         url,
                         loading: true,
                     },
-                    resolve: (d) => resolve(d),
-                    reject: (d) => reject(d),
+                    resolve: (d: any) => resolve(d),
+                    reject: (d: any) => reject(d),
                     onReady,
                 },
             });
@@ -108,7 +108,7 @@ export class ModalFactory {
         return promise;
     }
 
-    hideLoadingSpinner(modalId) {
+    hideLoadingSpinner(modalId: string) {
         const openModal = this.store.state.openModals[modalId];
         if (openModal) {
             openModal.props.loading = false;
@@ -116,7 +116,7 @@ export class ModalFactory {
         }
     }
 
-    static generateId() {
-        return (new Date()).getTime();
+    static generateId(): string {
+        return (new Date()).getTime().toString();
     }
 }

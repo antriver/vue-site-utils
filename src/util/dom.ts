@@ -2,7 +2,7 @@
  * @param {HTMLElement} element
  * @return {{top: number, left: number}}
  */
-export function getElementOffset(element) {
+export function getElementOffset(element: HTMLElement) {
     const de = document.documentElement;
     const box = element.getBoundingClientRect();
     const top = box.top + window.pageYOffset - de.clientTop;
@@ -14,7 +14,7 @@ function scrollOffsetTop() {
     return window.innerWidth < 992 ? 62 : 72;
 }
 
-export function scrollToElement(id) {
+export function scrollToElement(id: string) {
     const domElement = document.getElementById(id);
     if (domElement) {
         document.getElementsByTagName('html')[0].scrollTop = getElementOffset(domElement).top - scrollOffsetTop();
@@ -29,7 +29,7 @@ export function scrollToElement(id) {
  * @param {Element|HTMLElement} element
  * @param {function} [callback]
  */
-export function smoothScrollToElement(element, callback) {
+export function smoothScrollToElement(element: HTMLElement, callback?: Function) {
     const targetY = getElementOffset(element).top - scrollOffsetTop();
     const scrollEl = document.getElementsByTagName('html')[0];
     const currentDiff = scrollEl.scrollTop - targetY;
@@ -61,13 +61,8 @@ export function smoothScrollToElement(element, callback) {
 
 /**
  * Scroll the given element to the given y position smoothly.
- *
- * @param element
- * @param to
- * @param duration
- * @param callback
  */
-export function scrollElementTo(element, to, duration, callback) {
+export function scrollElementTo(element: HTMLElement, to: number, duration: number, callback?: Function) {
     if (duration <= 0) return;
     const difference = to - element.scrollTop;
     const perTick = difference / duration * 10;

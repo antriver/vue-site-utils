@@ -7,7 +7,8 @@ module.exports = {
     extends: [
         '@antriver/eslint-config-antriver',
         '@antriver/eslint-config-antriver/vue',
-        'plugin:@typescript-eslint/recommended'
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
     ],
     parser: 'vue-eslint-parser',
     parserOptions: {
@@ -26,9 +27,12 @@ module.exports = {
             'off'
         ],
 
+        '@typescript-eslint/ban-ts-ignore': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
+
         "no-useless-constructor": "off",
         "@typescript-eslint/no-useless-constructor": "error",
-        "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/explicit-function-return-type": ["error"]
     },
     overrides: [
         {
@@ -46,13 +50,4 @@ module.exports = {
             typescript: {}
         }
     },
-    // check if imports actually resolve
-    /*'settings': {
-        'import/resolver': {
-            'webpack': {
-                // See https://cli.vuejs.org/guide/webpack.html#using-resolved-config-as-a-file
-                'config': './node_modules/@vue/cli-service/webpack.config.js'
-            }
-        }
-    }*/
 };

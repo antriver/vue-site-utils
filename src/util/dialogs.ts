@@ -1,7 +1,7 @@
-export function showAlert(text, btnClass, btnText) {
+export function showAlert(text: string, btnClass?: string, btnText?: string) {
     if (typeof window !== 'undefined') {
-        if (window.rootVue) {
-            return window.rootVue.$options.$modalFactory.openComponent(
+        if ((window as any).rootVue) {
+            return (window as any).rootVue.$options.$modalFactory.openComponent(
                 'AlertModal',
                 {
                     text,
