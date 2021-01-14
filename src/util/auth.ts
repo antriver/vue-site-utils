@@ -130,7 +130,7 @@ export const logout = (
  * @param store
  * @param {Api} api
  *
- * @return {Promise<any>}
+ * @return {Promise}
  */
 export function checkUserCookie(cookies, store, api) {
     return new Promise((resolve, reject) => {

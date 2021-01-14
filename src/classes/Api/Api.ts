@@ -7,7 +7,7 @@ import { TokenStoreInterface } from '../../token-stores/TokenStoreInterface';
 import { ApiRequestOptions } from './ApiRequestOptions';
 
 const logApiError = (err: ApiError): void => {
-    /* global Raven */
+    // @ts-ignore
     if (typeof Raven !== 'undefined') {
         const responseStatus = err.response ? parseInt(err.response.status, 10) : null;
         if (responseStatus === 403) {
@@ -16,6 +16,7 @@ const logApiError = (err: ApiError): void => {
         if (err.message === 'Network Error') {
             return;
         }
+        // @ts-ignore
         Raven.captureException(
             err,
             {
