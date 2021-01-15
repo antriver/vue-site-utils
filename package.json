@@ -26,7 +26,7 @@
     "vuex": "^3.1.3"
   },
   "devDependencies": {
-    "@antriver/eslint-config-antriver": "^1.0.6",
+    "@antriver/eslint-config-antriver": "^1.0.8",
     "@types/lodash": "^4.14.149",
     "@types/lru-cache": "^5.1.0",
     "@types/qs": "^6.9.0",

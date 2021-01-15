@@ -36,6 +36,7 @@ export function ensureLoggedInOrRedirectToLogin(
         const user = getCurrentUser(store);
         if (user) {
             resolve(user);
+            return;
         }
 
         redirectToLogin(next, router);

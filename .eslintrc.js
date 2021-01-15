@@ -5,8 +5,6 @@ module.exports = {
         node: true,
     },
     extends: [
-        '@antriver/eslint-config-antriver',
-        '@antriver/eslint-config-antriver/vue',
         '@antriver/eslint-config-antriver/typescript',
     ],
     parser: 'vue-eslint-parser',
