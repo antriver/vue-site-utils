@@ -38,7 +38,7 @@ export function setBg(
     bgColorTheme?: string,
     bgPattern?: string,
     darkMode?: boolean,
-):void {
+): void {
     const bgColorStyle = bgColor
         ? `<style id="bg-color-style">.bg-color { background: #${bgColor}; }</style>`
         : '';

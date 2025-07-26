@@ -31,7 +31,7 @@ export function ensureLoggedInOrRedirectToLogin(
     store: Store<AuthStore>,
     router: VueRouter,
     next: string,
-):Promise<User> {
+): Promise<User> {
     return new Promise((resolve, reject) => {
         const user = getCurrentUser(store);
         if (user) {

@@ -1,10 +1,10 @@
-import { distanceInWordsStrict, format } from 'date-fns';
+import { formatDistanceStrict, format } from 'date-fns';
 
 export function relativeTime(value: Date|string): string {
     if (!(value instanceof Date)) {
         value = new Date(value);
     }
-    return distanceInWordsStrict(
+    return formatDistanceStrict(
         value,
         new Date(),
     );
