@@ -151,7 +151,7 @@ export class Api extends AbstractApi {
                 }
             }
 
-            console.log('[API] Request Started', method, url); // , jsonParams, headers);
+            console.log('[API] Request Started', method, url, jsonParams, headers);
 
             let requestData = null;
             if (data instanceof FormData) {
