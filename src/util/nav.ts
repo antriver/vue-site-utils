@@ -1,6 +1,6 @@
 import { scrollToElement } from './dom';
-import VueRouter from 'vue-router';
 import { ModalFactory } from '../classes/Modals/ModalFactory';
+import type { Router } from 'vue-router';
 
 export function set404(component: any): void {
     component.$root.$options.$shouldReloadOnNavigation = true;
@@ -10,7 +10,7 @@ export function set404(component: any): void {
     }
 }
 
-export function handleClicksWithVue(router: VueRouter, modalFactory: ModalFactory): void {
+export function handleClicksWithVue(router: Router, modalFactory: ModalFactory): void {
     document.addEventListener('click', (event) => {
         const target: EventTarget = event.target;
 

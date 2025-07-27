@@ -1,9 +1,8 @@
 import { TokenStoreInterface } from '../token-stores/TokenStoreInterface';
-import { NavigationGuard, NavigationGuardNext, VueRouter } from 'vue-router/types/router';
 import { Store } from 'vuex';
 import { Api } from '../classes/Api/Api';
 import { User, UserGlobalOptions } from '../models/User';
-import { Route } from 'vue-router';
+import { NavigationGuard, NavigationGuardNext, RouteLocationNormalized, Router, RouteRecord } from 'vue-router';
 
 export interface AuthStore {
     auth: {
@@ -11,10 +10,10 @@ export interface AuthStore {
         token?: string;
         loginRedirect?: string;
         currentUserGlobalOptions?: UserGlobalOptions;
-    }
+    };
 }
 
-export function redirectToLogin(next: string, router?: VueRouter): void {
+export function redirectToLogin(next: string, router?: Router): void {
     const url = `/login${next ? `?next=${encodeURIComponent(next)}` : ''}`;
     if (router) {
         router.replace(url);
@@ -23,13 +22,13 @@ export function redirectToLogin(next: string, router?: VueRouter): void {
     }
 }
 
-export function getCurrentUser(store: Store<AuthStore>): User|null {
+export function getCurrentUser(store: Store<AuthStore>): User | null {
     return store.state.auth.currentUser || null;
 }
 
 export function ensureLoggedInOrRedirectToLogin(
     store: Store<AuthStore>,
-    router: VueRouter,
+    router: Router,
     next: string,
 ): Promise<User> {
     return new Promise((resolve, reject) => {
@@ -48,7 +47,7 @@ export const loginFromResponse = (
     tokenStore: TokenStoreInterface,
     store: Store<AuthStore>,
     response: any,
-    router?: VueRouter,
+    router?: Router,
     redirect = true,
 ): void => {
     store.commit('auth/setUser', response);
@@ -97,7 +96,7 @@ export function loadUserFromStoredToken(
     tokenStore: TokenStoreInterface,
     store: Store<AuthStore>,
     api: Api,
-): Promise<User|null> {
+): Promise<User | null> {
     return new Promise((resolve, reject) => {
         // User is already set.
         // This was probably set by SSR.
@@ -159,7 +158,7 @@ export function loadUserFromStoredToken(
  * Returns a function that can be used as a beforeEnter filter in Vue router.
  */
 export function createAuthGuard(store: Store<AuthStore>): NavigationGuard {
-    return (to: Route, from: Route, next: NavigationGuardNext): void => {
+    return (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
         const promise = (window as any).existingAuthPromise || Promise.resolve();
         promise.finally(() => {
             if (getCurrentUser(store)) {

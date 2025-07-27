@@ -120,7 +120,7 @@ export class Api extends AbstractApi {
                     response = {};
                 }
 
-                console.error('[API] Error', method, url, jsonParams, message, response);
+                console.error('[API] Request Failed', method, url, jsonParams, message, response);
 
                 const err = new ApiError(message, response, {
                     method, url, params, headers,
@@ -136,7 +136,7 @@ export class Api extends AbstractApi {
             };
 
             const onComplete = (): void => {
-                console.log(`[API] Request took ${Date.now() - startedAt}ms`, method, url, jsonParams);
+                console.log('[API] Request Finished', method, url, jsonParams, `${Date.now() - startedAt}ms`);
             };
 
             // Check the cache for an existing result.
@@ -151,7 +151,7 @@ export class Api extends AbstractApi {
                 }
             }
 
-            console.log('[API] Request', method, url); // , jsonParams, headers);
+            console.log('[API] Request Started', method, url); // , jsonParams, headers);
 
             let requestData = null;
             if (data instanceof FormData) {

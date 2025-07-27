@@ -14,8 +14,15 @@ module.exports = {
     plugins: [
         '@typescript-eslint/eslint-plugin',
     ],
+    settings: {
+        'import/resolver': {
+            typescript: {},
+        },
+    },
     rules: {
         '@typescript-eslint/ban-types': 'off',
+
+        '@typescript-eslint/type-annotation-spacing': 'off',
     },
     overrides: [
         {
@@ -28,9 +35,4 @@ module.exports = {
             },
         },
     ],
-    settings: {
-        'import/resolver': {
-            typescript: {},
-        },
-    },
 };
