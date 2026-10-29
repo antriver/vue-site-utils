@@ -113,14 +113,18 @@ export class Api extends AbstractApi {
             /**
              * @param {string} message
              * @param {?object} response
+             * @param {?number} status HTTP status of the failed response, if there was one.
              */
-            let onError = (message: string, response: any): void => {
+            let onError = (message: string, response: any, status: number | null = null): void => {
                 if (!response) {
                     // response will always be an object to avoid having to check everywhere.
                     response = {};
                 }
 
-                console.error('[API] Request Failed', method, url, jsonParams, message, response);
+                // A 4xx (a missing record, a failed validation) is an expected answer rather than a
+                // broken API, so it is logged as a warning and does not show up among real errors.
+                const log = status && status >= 400 && status < 500 ? console.warn : console.error;
+                log('[API] Request Failed', method, url, jsonParams, message, response);
 
                 const err = new ApiError(message, response, {
                     method, url, params, headers,
@@ -204,7 +208,7 @@ export class Api extends AbstractApi {
                         message = 'API Error';
                     }
 
-                    onError(message, responseJson);
+                    onError(message, responseJson, err?.response?.status || null);
                 })
                 .finally(onComplete);
         });
